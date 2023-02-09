@@ -1,0 +1,312 @@
+{
+   "openapi": "3.0.0",
+   "components": {
+      "securitySchemes": {
+         "cookieAuth": {
+            "type": "apiKey",
+            "in": "cookie",
+            "name": "token"
+         }
+      }
+   },
+   "info": {
+      "title": "API Boilerplate",
+      "description": "Daftar api Boilerplate PT. XYZ",
+      "version": "1.0.0"
+   },
+   "_servers": [
+      {
+         "url": "http://localhost:5001",
+         "description": "localhost"
+      }
+   ],
+   "tags": [
+      {
+         "name": "Authentication",
+         "description": "authentikasi untuk user melakukan login atau lupa password"
+      },
+      {
+         "name": "Users",
+         "description": "api untuk melakukan CRUD data users"
+      }
+   ],
+   "paths": {
+      "/api/auth/login": {
+         "post": {
+            "tags": ["Authentication"],
+            "summary": "lakukan login",
+            "description": "description ...",
+            "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "email": {
+                              "type": "string",
+                              "required": true
+                           },
+                           "password": {
+                              "type": "string"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Success"
+               }
+            }
+         }
+      },
+      "/api/auth/register": {
+         "post": {
+            "tags": ["Authentication"],
+            "summary": "lakukan register",
+            "description": "description ...",
+            "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "name": {
+                              "type": "string",
+                              "required": true
+                           },
+                           "email": {
+                              "type": "string",
+                              "required": true
+                           },
+                           "password": {
+                              "type": "string"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Success"
+               },
+               "422": {
+                  "description": "Validation error"
+               }
+            }
+         }
+      },
+      "/api/auth/logout": {
+         "post": {
+            "tags": ["Authentication"],
+            "summary": "lakukan logout",
+            "description": "description ...",
+            "responses": {
+               "200": {
+                  "description": "Success logout"
+               },
+               "422": {
+                  "description": "Validation error"
+               }
+            }
+         }
+      },
+      "/api/users": {
+         "get": {
+            "tags": ["Users"],
+            "summary": "Get all users",
+            "description": "API untuk mengambil data users",
+            "produces": "application/json",
+            "security": [
+               {
+                  "cookieAuth": []
+               }
+            ],
+            "parameters": [
+               {
+                  "in": "query",
+                  "name": "id",
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Find user by id"
+               },
+               {
+                  "in": "query",
+                  "name": "name",
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Find user by name"
+               },
+               {
+                  "in": "query",
+                  "name": "email",
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Find user by email"
+               },
+               {
+                  "in": "query",
+                  "name": "isAdmin",
+                  "schema": {
+                     "type": "boolean"
+                  },
+                  "description": "Find user by isAdmin"
+               },
+               {
+                  "in": "query",
+                  "name": "limit",
+                  "schema": {
+                     "type": "integer"
+                  },
+                  "description": "The number limit of users. default 100 users"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful operation",
+                  "schema": {
+                     "$ref": "#/definitions/Users"
+                  }
+               }
+            }
+         },
+         "post": {
+            "tags": ["Users"],
+            "summary": "Create user",
+            "description": "This can only be done by the logged in user.",
+            "operationId": "createUser",
+            "consumes": ["multipart/form-data"],
+            "requestBody": {
+               "content": {
+                  "multipart/form-data": {
+                     "schema": {
+                        "$ref": "#/definitions/Users"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "successful operation"
+               }
+            }
+         }
+      },
+      "/api/users/{id}": {
+         "get": {
+            "tags": ["Users"],
+            "summary": "Get user",
+            "description": "Get user by id",
+            "operationId": "getUser",
+            "parameters": [
+               {
+                  "in": "path",
+                  "name": "id",
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful operation"
+               },
+               "404": {
+                  "description": "User not found"
+               }
+            }
+         },
+         "put": {
+            "tags": ["Users"],
+            "summary": "Update user",
+            "description": "This can only be done by the logged in user.",
+            "operationId": "updateUser",
+            "consumes": ["multipart/form-data"],
+            "parameters": [
+               {
+                  "in": "path",
+                  "name": "id",
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "requestBody": {
+               "content": {
+                  "multipart/form-data": {
+                     "schema": {
+                        "$ref": "#/definitions/Users"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "successful operation"
+               }
+            }
+         },
+         "delete": {
+            "tags": ["Users"],
+            "summary": "Delete user",
+            "description": "This can only be done by the logged in user.",
+            "operationId": "delete",
+            "security": [
+               {
+                  "cookieAuth": []
+               }
+            ],
+            "parameters": [
+               {
+                  "in": "path",
+                  "name": "id",
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful operation"
+               }
+            }
+         }
+      }
+   },
+   "definitions": {
+      "Users": {
+         "type": "object",
+         "properties": {
+            "name": {
+               "type": "string"
+            },
+            "photo": {
+               "type": "string",
+               "format": "binary"
+            },
+            "email": {
+               "type": "string"
+            },
+            "password": {
+               "type": "string"
+            },
+            "isAdmin": {
+               "type": "boolean",
+               "description": "only admin can change this field"
+            },
+            "gender": {
+               "type": "string",
+               "enum": ["L", "P"]
+            }
+         },
+         "xml": {
+            "name": "Users"
+         }
+      }
+   }
+}

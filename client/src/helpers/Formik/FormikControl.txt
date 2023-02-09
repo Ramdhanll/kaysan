@@ -1,0 +1,55 @@
+// import React, { FC } from 'react'
+// import FormikCheckbox from './FormikCheckbox'
+// import FormikInput from './FormikInput'
+// import FormikPassword from './FormikPassword'
+// import FormikPhoto from './FormikPhoto'
+// import FormikRadioButton from './FormikRadioButton'
+// import FormikSelect from './FormikSelect'
+// import FormikTextArea from './FormikTextArea'
+// // import FormikTextEditorQuill from './FormikTextEditorQuill'
+
+// interface IFormikControl {
+//    control: string
+//    onChange: (e: any) => void
+//    label: string
+//    name: string
+//    required: boolean
+//    type: string
+//    ref: any
+//    flexDirection: string
+//    gridGap: string
+//    disabled: boolean
+//    options: {
+//       key: any
+//       value: any
+//       name: string
+//    }[]
+//    validate: string
+//    h: any
+//    placeholder: string
+// }
+
+// const FormikControl: FC<IFormikControl> = ({control, ...rest}) => {
+//    // const { control, ...rest } = props
+
+//    switch (control) {
+//       case 'input':
+//          return <FormikInput {...rest} />
+//       case 'photo':
+//          return <FormikPhoto {...rest} />
+//       case 'password':
+//          return <FormikPassword {...rest} />
+//       case 'textarea':
+//          return <FormikTextArea {...rest} />
+//       case 'select':
+//          return <FormikSelect {...rest} />
+//       case 'radio':
+//          return <FormikRadioButton {...rest} />
+//       case 'checkbox':
+//          return <FormikCheckbox {...rest} />
+//       default:
+//          return null
+//    }
+// }
+
+// export default FormikControl

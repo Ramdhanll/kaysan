@@ -1,0 +1,24 @@
+[
+   {
+      "id": 1,
+      "name": "Flueer Type 42",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas consequat rhoncus ornare. Nam et dolor vitae arcu tristique dignissim. Pellentesque auctor pretium orci, ac volutpat tortor condimentum et. Nullam mollis euismod porta. Mauris ultricies mi et odio viverr euismod sodales magna, vitae commodo lorem ultrices et. Cras ut diam.",
+      "bedroom": 3,
+      "bathroom": 4,
+      "area": 2304,
+      "images": [
+         "https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGhvbWUlMjBwcm9wZXJ0eXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+         "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8aG9tZSUyMHByb3BlcnR5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+         "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fGhvbWUlMjBwcm9wZXJ0eXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+         "https://media.istockphoto.com/id/1263778774/photo/spectacular-kitchen-in-brand-new-tour-home.jpg?b=1&s=170667a&w=0&k=20&c=dmYBu9FTANkl0Q7vj3-2vt5rWxe7IRZ5IUOwGPM8z2A=",
+         "https://media.istockphoto.com/id/1263778774/photo/spectacular-kitchen-in-brand-new-tour-home.jpg?b=1&s=170667a&w=0&k=20&c=dmYBu9FTANkl0Q7vj3-2vt5rWxe7IRZ5IUOwGPM8z2A="
+      ],
+      "location": {
+         "provinsi": "Banten",
+         "Kota/Kabupaten": "Kabupaten Tangerang",
+         "Kecamatan": "Kelapa Dua",
+         "detail_location": "Dasana indah blok UD 10/28 RT 04 RW 28"
+      },
+      "price": 700000000
+   }
+]

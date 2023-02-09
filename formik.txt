@@ -1,0 +1,268 @@
+    <Formik
+                     initialValues={initialValues}
+                     onSubmit={handleSubmit}
+                     validationSchema={validationSchema}
+                     enableReinitialize
+                  >
+                     {(props) => (
+                        <Form>
+                           <HStack spacing={7} alignItems={'start'}>
+                              <VStack spacing={5} flex='0.5'>
+                                 <FormikInput
+                                    name='name'
+                                    label='Name'
+                                    required={true}
+                                    placeholder='the name of product'
+                                 />
+
+                                 <FormikInput
+                                    name='price'
+                                    type='number'
+                                    label='Price'
+                                    required={true}
+                                 />
+
+                                 <FormikInput
+                                    name='bedroom'
+                                    type='number'
+                                    label='Bedroom'
+                                    required={true}
+                                    placeholder='total bedroom'
+                                 />
+
+                                 <FormikInput
+                                    name='bathroom'
+                                    type='number'
+                                    label='Bathroom'
+                                    required={true}
+                                    placeholder='total bathroom'
+                                 />
+
+                                 <FormikInput
+                                    name='area'
+                                    type='number'
+                                    label='Area'
+                                    required={true}
+                                    placeholder='total area'
+                                 />
+                              </VStack>
+                              <VStack spacing={5} flex='0.5'>
+                                 <FormControl
+                                    isRequired
+                                    onChange={(e) => handleChangeProvinsi(e)}
+                                 >
+                                    <FormLabel>Provinsi</FormLabel>
+                                    <Select placeholder='Select provinsi'>
+                                       {provinces.map((province: any) => (
+                                          <option value={province.value}>
+                                             {province.name}
+                                          </option>
+                                       ))}
+                                    </Select>
+                                 </FormControl>
+
+                                 <FormControl
+                                    isRequired
+                                    onChange={(e) => handleChangeKabOrKota(e)}
+                                 >
+                                    <FormLabel>Kabupaten / Kota</FormLabel>
+                                    <Select placeholder='Select kabupaten / kota'>
+                                       {kabOrKota.map((item: any) => (
+                                          <option value={item.value}>
+                                             {item.name}
+                                          </option>
+                                       ))}
+                                    </Select>
+                                 </FormControl>
+
+                                 <FormControl
+                                    isRequired
+                                    onChange={(e) => handleChangeKecamatan(e)}
+                                 >
+                                    <FormLabel>Kecamatan</FormLabel>
+                                    <Select placeholder='Select kecamatan'>
+                                       {kecamatans.map((item: any) => (
+                                          <option value={item.value}>
+                                             {item.name}
+                                          </option>
+                                       ))}
+                                    </Select>
+                                 </FormControl>
+
+                                 <FormControl
+                                    isRequired
+                                    onChange={(e) => console.log(e)}
+                                 >
+                                    <FormLabel>Kelurahan</FormLabel>
+                                    <Select placeholder='Select kelurahan'>
+                                       {kelurahans.map((item: any) => (
+                                          <option value={item.value}>
+                                             {item.name}
+                                          </option>
+                                       ))}
+                                    </Select>
+                                 </FormControl>
+                                 {/* <FormikSelect
+                                    options={provinces}
+                                    name='provinsi'
+                                    label='Provinsi'
+                                    required={true}
+                                    placeholder='select provinsi'
+                                 />
+
+                                 <FormikSelect
+                                    options={[
+                                       {
+                                          key: 0,
+                                          name: 'Banten',
+                                          value: 'Banten',
+                                       },
+                                    ]}
+                                    name='kota/kabupaten'
+                                    label='Kota/Kabupaten'
+                                    required={true}
+                                    placeholder='select kota/kabupaten'
+                                 />
+
+                                 <FormikSelect
+                                    options={[
+                                       {
+                                          key: 0,
+                                          name: 'Banten',
+                                          value: 'Banten',
+                                       },
+                                    ]}
+                                    name='kecamatan'
+                                    label='Kecamatan'
+                                    required={true}
+                                    placeholder='select kecamatan'
+                                 /> */}
+
+                                 <FormikTextArea
+                                    name='Detail Location'
+                                    label='Detail Location'
+                                    required={true}
+                                    h={7}
+                                    placeholder='detail location property'
+                                 />
+
+                                 <div style={{ marginBottom: '70px' }}></div>
+                                 {/* <FormikPhoto
+                                    name='photo'
+                                    label='Photo'
+                                    onChange={handlePreviewPhoto}
+                                 /> */}
+
+                                 <FormikTextEditorQuill
+                                    name='description'
+                                    type='text'
+                                    label='Description'
+                                    required={true}
+                                 />
+                              </VStack>
+                              <VStack spacing={5} flex='0.5' align={'start'}>
+                                 <Text textAlign={'left'} fontWeight='medium'>
+                                    Photos
+                                 </Text>
+                                 <Text
+                                    textAlign={'left'}
+                                    fontWeight='light'
+                                    color={'red'}
+                                    fontSize='xs'
+                                    style={{ marginTop: '1px' }}
+                                 >
+                                    * minimal 4 photos
+                                 </Text>
+                                 <ImageUploading
+                                    multiple
+                                    value={images}
+                                    onChange={onChange}
+                                    maxNumber={maxNumber}
+                                    dataURLKey='data_url'
+                                    acceptType={['jpg', 'png']}
+                                 >
+                                    {({
+                                       imageList,
+                                       onImageUpload,
+                                       onImageRemoveAll,
+                                       onImageUpdate,
+                                       onImageRemove,
+                                       isDragging,
+                                       dragProps,
+                                    }) => (
+                                       // write your building UI
+                                       <Flex flexDir={'column'}>
+                                          <HStack mb={3}>
+                                             <Button
+                                                colorScheme={'cyan'}
+                                                style={
+                                                   isDragging
+                                                      ? { color: 'red' }
+                                                      : { color: '' }
+                                                }
+                                                onClick={onImageUpload}
+                                             >
+                                                Upload image
+                                             </Button>
+                                             <Button
+                                                colorScheme={'red'}
+                                                onClick={onImageRemoveAll}
+                                             >
+                                                Remove all images
+                                             </Button>
+                                          </HStack>
+
+                                          {imageList.map((image, index) => (
+                                             <HStack
+                                                key={index}
+                                                className='image-item'
+                                                justifyContent={'center'}
+                                                alignItems='center'
+                                                marginBottom={'4'}
+                                             >
+                                                <img
+                                                   src={image.data_url}
+                                                   alt=''
+                                                   width='100'
+                                                />
+                                                <VStack className='image-item__btn-wrapper'>
+                                                   <Button
+                                                      onClick={() =>
+                                                         onImageUpdate(index)
+                                                      }
+                                                      colorScheme='yellow'
+                                                      size={'xs'}
+                                                   >
+                                                      Update
+                                                   </Button>
+                                                   <Button
+                                                      onClick={() =>
+                                                         onImageRemove(index)
+                                                      }
+                                                      colorScheme='gray'
+                                                      size={'xs'}
+                                                   >
+                                                      Remove
+                                                   </Button>
+                                                </VStack>
+                                             </HStack>
+                                          ))}
+                                       </Flex>
+                                    )}
+                                 </ImageUploading>
+
+                                 <Button
+                                    type='submit'
+                                    isLoading={props.isSubmitting}
+                                    variant='solid'
+                                    colorScheme='blue'
+                                    w='100%'
+                                    marginTop={'32'}
+                                 >
+                                    {isAdd ? 'Create' : 'Edit'}
+                                 </Button>
+                              </VStack>
+                           </HStack>
+                        </Form>
+                     )}
+                  </Formik>
