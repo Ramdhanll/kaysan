@@ -11,11 +11,11 @@ const config = {
          autoIndex: false,
          retryWrites: false,
       },
-      url: 'mongodb://localhost/kaysan',
+      url: process.env.MONGO_URI,
    },
    server: {
-      host: `localhost`,
-      port: process.env.PORT || 5001,
+      uri: process.env.SERVER_URI,
+      port: process.env.EXPRESS_PORT || 5001,
    },
 }
 

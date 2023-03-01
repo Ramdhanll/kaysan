@@ -5,6 +5,8 @@ import swaggerUI from 'swagger-ui-express'
 import logging from '../../config/logging'
 import { authRouter, productRouter, userRouter } from '../routes'
 import apiDocs from '../../apiDocs.json'
+import path from 'path'
+const __dirname = path.resolve()
 
 const createServer = () => {
    const app = express()
@@ -13,9 +15,18 @@ const createServer = () => {
    app.use(
       cors({
          credentials: true,
-         // origin: ['*', 'http://localhost:3000', 'http://localhost'],
-         origin: 'http://localhost:3000',
+         origin: ['*', 'http://localhost:3000', 'http://localhost'],
+         // origin: 'http://localhost:3000',
       })
+   )
+
+   app.use(
+      '/uploads',
+      express.static(path.join(__dirname, '/src/uploads/products'))
+   )
+   app.use(
+      '/uploads',
+      express.static(path.join(__dirname, '/src/uploads/users'))
    )
 
    app.use(cookieParser())

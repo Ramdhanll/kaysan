@@ -18,7 +18,7 @@ import {
    ModalCloseButton,
    useDisclosure,
    VStack,
-   Image,
+   Image as ImageChakra,
    useToast,
    HStack,
    Spinner,
@@ -57,6 +57,7 @@ import ReactQuill from 'react-quill'
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 import ProductGrid from '../../../components/Admin/Product/ProductGrid'
+import imageToBase64 from 'image-to-base64'
 
 // @ts-ignore
 window.katex = katex
@@ -80,6 +81,10 @@ interface IProduct {
       kelurahan_name: string
       detail_location: string
    }
+   images?: {
+      url_image: string
+      _id: string
+   }[]
    isRecommended: boolean
 }
 
@@ -119,7 +124,7 @@ const AdminProduct: FC<IPage> = () => {
 
    const [images, setImages] = useState([])
    const maxNumber = 69
-   const onChange = (imageList: any, addUpdateIndex: any) => {
+   const onChangeImage = (imageList: any, addUpdateIndex: any) => {
       // data for submit
       setImages(imageList)
    }
@@ -285,6 +290,7 @@ const AdminProduct: FC<IPage> = () => {
    }
 
    // SECTION ADD AND EDIT PRODUCT
+   const [imagesUpdate, setImagesUpdate] = useState<any>([])
 
    const handleOpenModalAddEdit = ({
       isAdd,
@@ -293,8 +299,11 @@ const AdminProduct: FC<IPage> = () => {
       isAdd: boolean
       product?: IProduct
    }) => {
-      console.log('pr', product)
+      setImagesUpdate([])
+      setImages([])
+
       setIsAdd(isAdd)
+
       if (product) {
          setProductSelected(product)
 
@@ -310,7 +319,7 @@ const AdminProduct: FC<IPage> = () => {
             product.location.kecamatan,
             product.location.kecamatan_name
          )
-
+         console.log('product', product)
          setProductForm({
             ...productForm,
             name: product.name,
@@ -332,6 +341,15 @@ const AdminProduct: FC<IPage> = () => {
             },
             isRecommended: product.isRecommended,
          })
+
+         if (product.images?.length) {
+            const imagesUrl: any = []
+            product.images.map((image) => {
+               imagesUrl.push(image.url_image)
+            })
+
+            setImagesUpdate(imagesUrl)
+         }
       }
       onOpen()
    }
@@ -339,80 +357,118 @@ const AdminProduct: FC<IPage> = () => {
    const [photoFile, setPhotoFile] = useState('')
    const [photoPrev, setPhotoPrev] = useState<any>('')
 
-   const handlePreviewPhoto = (e: any) => {
-      const file = e.target.files[0]
-      var t = file.type.split('/').pop().toLowerCase()
-      if (
-         t !== 'jpeg' &&
-         t !== 'jpg' &&
-         t !== 'png' &&
-         t !== 'bmp' &&
-         t !== 'gif'
-      ) {
-         toast({
-            title: 'Gagal',
-            description: 'Gunakan file photo',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-            position: 'top-right',
-         })
-         return false
-      }
-      setPhotoFile(file)
-      let reader = new FileReader()
-      reader.onload = () => {
-         const src = reader.result
-         setPhotoPrev(src)
-      }
-
-      reader.readAsDataURL(file)
-   }
-
    const [isErrorValidationPhotos, setIsErrorValidationPhotos] = useState(false)
    const [isSubmitLoading, setIsSubmitLoading] = useState(false)
 
-   const handleSubmit = async (e: any) => {
-      e.preventDefault()
+   const handleSubmit = async (ev: any) => {
+      ev.preventDefault()
 
       setIsSubmitLoading(true)
 
-      // validation images must be more then 4
-      if (images.length < 4) {
-         setIsErrorValidationPhotos(true)
-         setIsSubmitLoading(false)
-         return false
-      } else {
-         setIsErrorValidationPhotos(false)
-      }
+      // // validation images must be more then 4
+      // if (images.length < 4) {
+      //    setIsErrorValidationPhotos(true)
+      //    setIsSubmitLoading(false)
+      //    return false
+      // } else {
+      //    setIsErrorValidationPhotos(false)
+      // }
 
-      const rawImage = images.map((image: any) => image.data_url)
+      // const rawImage = images.map((image: any) => image.data_url)
 
       logging.info('creating product ....')
 
       try {
-         const data = {
-            ...productForm,
-            ...productForm.location,
-            images: rawImage,
-         }
-
          if (isAdd) {
-            await ProductService.Create(data)
-         } else {
-            await ProductService.Update(productSelected?._id, data)
-         }
+            // validation images must be more then 4
+            if (images.length < 4) {
+               setIsErrorValidationPhotos(true)
+               setIsSubmitLoading(false)
+               return false
+            } else {
+               setIsErrorValidationPhotos(false)
+            }
 
-         // mutate swr
-         mutate(`/api/products`)
-         setIsSubmitLoading(false)
-         onClose()
+            const rawImage = images.map((image: any) => image.data_url)
+
+            const data = {
+               ...productForm,
+               ...productForm.location,
+               images: rawImage,
+            }
+
+            await ProductService.Create(data)
+
+            // mutate swr
+            mutate(`/api/products`)
+            setIsSubmitLoading(false)
+            onClose()
+         } else {
+            Promise.all(
+               imagesUpdate.map((urlImage: string) => {
+                  return toDataURL(urlImage)
+               })
+            )
+               .then(async (results) => {
+                  const totalImageUpdate = results.length + images.length
+
+                  // validation images must be more then 4
+                  if (totalImageUpdate < 4) {
+                     setIsErrorValidationPhotos(true)
+                     setIsSubmitLoading(false)
+                     return false
+                  } else {
+                     setIsErrorValidationPhotos(false)
+                  }
+
+                  const rawImage = images.map((image: any) => image.data_url)
+
+                  const data = {
+                     ...productForm,
+                     ...productForm.location,
+                     images: [...rawImage, ...results],
+                  }
+
+                  await ProductService.Update(productSelected?._id, data)
+
+                  // mutate swr
+                  mutate(`/api/products`)
+                  setIsSubmitLoading(false)
+                  onClose()
+               })
+               .catch((error) => {
+                  console.error(error)
+               })
+
+            // const imagesBase64Update = imagesUpdate.map(
+            //    async (urlImage: string) => {
+            //       const res = await toDataURL(urlImage)
+            //       return res
+            //    }
+            // )
+
+            // Promise.all(imagesBase64Update).then((res) => {
+
+            // })
+         }
       } catch (error) {
-         console.log('error', error)
          logging.error(error)
          setIsSubmitLoading(false)
       }
    }
+
+   const toDataURL = (url: any) =>
+      fetch(url)
+         .then((response) => response.blob())
+         .then(
+            (blob) =>
+               new Promise((resolve, reject) => {
+                  const reader = new FileReader()
+                  reader.onloadend = () => resolve(reader.result)
+                  reader.onerror = reject
+                  reader.readAsDataURL(blob)
+               })
+         )
 
    // Preview photo on table
    const [prevPhotoOnTable, setPrevPhotoOnTable] = useState<string>('')
@@ -447,7 +503,7 @@ const AdminProduct: FC<IPage> = () => {
       setIsLoadingAlertDelete(true)
       try {
          await ProductService.Delete(productSelected?._id)
-         mutate(`/api/products?page=${page}&name=${searchValue}`)
+         mutate(`/api/products`)
          setIsLoadingAlertDelete(false)
          onCloseAlertDelete()
 
@@ -493,6 +549,13 @@ const AdminProduct: FC<IPage> = () => {
       []
    )
 
+   const onImageUpdateRemove = (index: number) => {
+      const newItems = [...imagesUpdate]
+      newItems.splice(index, 1)
+
+      setImagesUpdate(newItems)
+   }
+
    return (
       <Box textAlign='left' p={5} bg='white' alignItems='center'>
          <Flex justifyContent='space-between' mb={5}>
@@ -508,133 +571,15 @@ const AdminProduct: FC<IPage> = () => {
                <Text>New Product</Text>
             </Button>
          </Flex>
-         {/* <Box mt='20px'>
-            <Search
-               setQuerySearch={setSearchValue}
-               borderColor='gray.400'
-               placeholder='Pencarian ...'
-               borderRadius='xl'
-               color='gray.400'
-               px='20px'
-            />
-         </Box> */}
 
          <Box>
             <ProductGrid
                products={dataProducts?.products || []}
                handleOpenModalAddEdit={handleOpenModalAddEdit}
+               handleOpenAlertDelete={handleOpenAlertDelete}
             />
          </Box>
          {/* TABLE */}
-         <Box mt='30px' mb='20px' overflowX='auto'>
-            <Table variant='simple'>
-               <Thead>
-                  <Tr>
-                     <Th>No</Th>
-                     <Th>Photo</Th>
-                     <Th>Name</Th>
-                     <Th>Price</Th>
-                     <Th>Actions</Th>
-                  </Tr>
-               </Thead>
-               <Tbody>
-                  {errorProducts ? (
-                     <Tr>
-                        <Td
-                           colSpan={8}
-                           bg='yellow.300'
-                           color='text'
-                           textAlign='center'
-                        >
-                           Data tidak ditemukan
-                        </Td>
-                     </Tr>
-                  ) : !dataProducts ? (
-                     <Tr>
-                        <Td
-                           colSpan={8}
-                           bg='yellow.300'
-                           color='text'
-                           textAlign='center'
-                        >
-                           <Spinner
-                              thickness='4px'
-                              speed='0.65s'
-                              emptyColor='gray.200'
-                              color='blue.500'
-                              size='md'
-                           />
-                        </Td>
-                     </Tr>
-                  ) : dataProducts?.products?.length ? (
-                     dataProducts?.products?.map(
-                        (product: IProduct, i: number) => (
-                           <Tr key={i}>
-                              <Td>{i + 1}</Td>
-                              <Td>
-                                 <Box cursor='pointer'>
-                                    {/* <Image
-                                       src={product.photo}
-                                       fallbackSrc='https://via.placeholder.com/50'
-                                       w='100px'
-                                       h='50px'
-                                       borderRadius='md'
-                                    /> */}
-                                 </Box>
-                              </Td>
-                              <Td>
-                                 <Text fontSize={['xs', 'sm', 'md']}>
-                                    {product.name}
-                                 </Text>
-                              </Td>
-                              <Td>
-                                 <Text fontSize={['xs', 'sm', 'md']}>
-                                    {product.price} K
-                                 </Text>
-                              </Td>
-                              <Td>
-                                 <HStack spacing={3}>
-                                    <Button
-                                       variant='solid'
-                                       colorScheme='cyan'
-                                       onClick={() =>
-                                          handleOpenModalAddEdit({
-                                             isAdd: false,
-                                             product: product,
-                                          })
-                                       }
-                                    >
-                                       <MdEdit size='16px' />
-                                    </Button>
-                                    <Button
-                                       variant='outline'
-                                       colorScheme='red'
-                                       onClick={() =>
-                                          handleOpenAlertDelete(product)
-                                       }
-                                    >
-                                       <MdDelete size='16px' />
-                                    </Button>
-                                 </HStack>
-                              </Td>
-                           </Tr>
-                        )
-                     )
-                  ) : (
-                     <Tr>
-                        <Td
-                           colSpan={8}
-                           bg='yellow.300'
-                           color='text'
-                           textAlign='center'
-                        >
-                           Data tidak ditemukan
-                        </Td>
-                     </Tr>
-                  )}
-               </Tbody>
-            </Table>
-         </Box>
 
          <Box display={dataProducts?.products?.length ? 'inline' : 'none'}>
             <Pagination
@@ -644,7 +589,7 @@ const AdminProduct: FC<IPage> = () => {
             />
          </Box>
 
-         {/* Modal Add Product */}
+         {/* Modal Add and Edit Product */}
          <Modal
             isOpen={isOpen}
             onClose={onClose}
@@ -779,6 +724,7 @@ const AdminProduct: FC<IPage> = () => {
                               <ReactQuill
                                  theme='snow'
                                  modules={modules}
+                                 value={productForm.description}
                                  onChange={(e) => {
                                     // form.setFieldValue(name, e)
                                     setProductForm({
@@ -802,19 +748,17 @@ const AdminProduct: FC<IPage> = () => {
                               }}
                            >
                               <FormLabel>Provinsi</FormLabel>
-                              <Select placeholder='Select provinsi'>
-                                 {provinces.map((province: any) =>
-                                    province.value ==
-                                    productSelected?.location.provinsi ? (
-                                       <option value={province.value} selected>
-                                          {province.name}
-                                       </option>
-                                    ) : (
-                                       <option value={province.value}>
-                                          {province.name}
-                                       </option>
-                                    )
-                                 )}
+                              <Select
+                                 placeholder='Select provinsi'
+                                 defaultValue={
+                                    productSelected?.location.provinsi
+                                 }
+                              >
+                                 {provinces.map((province: any) => (
+                                    <option value={province.value}>
+                                       {province.name}
+                                    </option>
+                                 ))}
                               </Select>
                            </FormControl>
 
@@ -960,7 +904,7 @@ const AdminProduct: FC<IPage> = () => {
                            <ImageUploading
                               multiple
                               value={images}
-                              onChange={onChange}
+                              onChange={onChangeImage}
                               maxNumber={maxNumber}
                               dataURLKey='data_url'
                               acceptType={['jpg', 'png']}
@@ -988,15 +932,54 @@ const AdminProduct: FC<IPage> = () => {
                                        >
                                           Upload image
                                        </Button>
-                                       <Button
+                                       {/* <Button
                                           colorScheme={'red'}
                                           onClick={onImageRemoveAll}
                                        >
                                           Remove all images
-                                       </Button>
+                                       </Button> */}
                                     </HStack>
 
                                     <Flex flexWrap={'wrap'} gap={3}>
+                                       {imagesUpdate.map(
+                                          (url: string, index: number) => (
+                                             <HStack
+                                                key={index}
+                                                className='image-item'
+                                                justifyContent={'center'}
+                                                alignItems='center'
+                                                marginBottom={'1'}
+                                             >
+                                                <img
+                                                   src={url}
+                                                   alt=''
+                                                   width='80'
+                                                />
+                                                <VStack className='image-item__btn-wrapper'>
+                                                   {/* <Button
+                                                      onClick={() =>
+                                                         onImageUpdate(index)
+                                                      }
+                                                      colorScheme='yellow'
+                                                      size={'xs'}
+                                                   >
+                                                      Update
+                                                   </Button> */}
+                                                   <Button
+                                                      onClick={() =>
+                                                         onImageUpdateRemove(
+                                                            index
+                                                         )
+                                                      }
+                                                      colorScheme='gray'
+                                                      size={'xs'}
+                                                   >
+                                                      Remove
+                                                   </Button>
+                                                </VStack>
+                                             </HStack>
+                                          )
+                                       )}
                                        {imageList.map((image, index) => (
                                           <HStack
                                              key={index}
@@ -1011,7 +994,7 @@ const AdminProduct: FC<IPage> = () => {
                                                 width='80'
                                              />
                                              <VStack className='image-item__btn-wrapper'>
-                                                <Button
+                                                {/* <Button
                                                    onClick={() =>
                                                       onImageUpdate(index)
                                                    }
@@ -1019,7 +1002,7 @@ const AdminProduct: FC<IPage> = () => {
                                                    size={'xs'}
                                                 >
                                                    Update
-                                                </Button>
+                                                </Button> */}
                                                 <Button
                                                    onClick={() =>
                                                       onImageRemove(index)
@@ -1040,7 +1023,7 @@ const AdminProduct: FC<IPage> = () => {
                            <FormControl>
                               <Checkbox
                                  colorScheme='green'
-                                 checked={productForm.isRecommended}
+                                 isChecked={productForm.isRecommended}
                                  onChange={(e) =>
                                     setProductForm({
                                        ...productForm,

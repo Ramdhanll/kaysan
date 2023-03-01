@@ -2,9 +2,6 @@ import React from 'react'
 import ReactDataGrid from '@inovua/reactdatagrid-community'
 import '@inovua/reactdatagrid-community/index.css'
 
-import NumberFilter from '@inovua/reactdatagrid-community/NumberFilter'
-import SelectFilter from '@inovua/reactdatagrid-community/SelectFilter'
-import DateFilter from '@inovua/reactdatagrid-community/DateFilter'
 import IProduct from '../../../interfaces/IProduct'
 import { Button, HStack } from '@chakra-ui/react'
 import { MdDelete, MdEdit } from 'react-icons/md'
@@ -14,10 +11,16 @@ const gridStyle = { minHeight: 600 }
 type Props = {
    products: IProduct[]
    handleOpenModalAddEdit: (data: any) => void
+   handleOpenAlertDelete: (data: any) => void
 }
 
-const ProductGrid = ({ products, handleOpenModalAddEdit }: Props) => {
+const ProductGrid = ({
+   products,
+   handleOpenModalAddEdit,
+   handleOpenAlertDelete,
+}: Props) => {
    const filterValue = [
+      { name: 'id', operator: 'startsWith', type: 'string', value: '' },
       { name: 'name', operator: 'startsWith', type: 'string', value: '' },
       {
          name: 'provinsi',
@@ -48,19 +51,35 @@ const ProductGrid = ({ products, handleOpenModalAddEdit }: Props) => {
          defaultWidth: 80,
          type: 'number',
       },
-      { name: 'name', header: 'Name', defaultFlex: 1 },
       {
-         name: 'provinsi',
+         name: 'name',
+         header: 'Name',
+         defaultFlex: 1,
+         sort: (c1: any, c2: any) => {
+            return c1.split(' ')[0].localeCompare(c2.split(' ')[0])
+         },
+         render: ({ cellProps }: { cellProps: any }) => {
+            return cellProps.data.name
+         },
+      },
+      {
+         name: `provinsi`,
          header: 'Provinsi',
          defaultFlex: 1,
+         sort: (c1: any, c2: any) => {
+            return c1.split(' ')[0].localeCompare(c2.split(' ')[0])
+         },
          render: ({ cellProps }: { cellProps: any }) => {
-            return cellProps.data.location.provinsi_name
+            return cellProps.data.provinsi
          },
       },
       {
          name: 'kabOrKota',
          header: 'Kabupaten / Kota',
          defaultFlex: 1,
+         sort: (c1: any, c2: any) => {
+            return c1.split(' ')[0].localeCompare(c2.split(' ')[0])
+         },
          render: ({ cellProps }: { cellProps: any }) => {
             return cellProps.data.location.kabOrKota_name
          },
@@ -69,6 +88,9 @@ const ProductGrid = ({ products, handleOpenModalAddEdit }: Props) => {
          name: 'kecamatan',
          header: 'Kecamatan',
          defaultFlex: 1,
+         sort: (c1: any, c2: any) => {
+            return c1.split(' ')[0].localeCompare(c2.split(' ')[0])
+         },
          render: ({ cellProps }: { cellProps: any }) => {
             return cellProps.data.location.kecamatan_name
          },
@@ -79,7 +101,6 @@ const ProductGrid = ({ products, handleOpenModalAddEdit }: Props) => {
          header: 'Actions',
          defaultFlex: 1,
          render: ({ value, cellProps }: { value: any; cellProps: any }) => {
-            console.log('cellProps', cellProps.data)
             return (
                <HStack spacing={1}>
                   <Button
@@ -99,7 +120,7 @@ const ProductGrid = ({ products, handleOpenModalAddEdit }: Props) => {
                   <Button
                      variant='outline'
                      colorScheme='red'
-                     onClick={() => console.log(value, cellProps)}
+                     onClick={() => handleOpenAlertDelete(cellProps.data)}
                      size='sm'
                   >
                      <MdDelete size='16px' />

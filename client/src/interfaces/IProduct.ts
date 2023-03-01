@@ -8,11 +8,17 @@ interface IProduct {
    images: string[]
    location: {
       provinsi: string
-      'Kota/Kabupaten': string
-      Kecamatan: string
+      provinsi_name: string
+      kabOrKota: string
+      kabOrKota_name: string
+      kecamatan: string
+      kecamatan_name: string
       detail_location: string
    }
    price: number
+   provinsi: string
+   kabOrKota: string
+   kecamatan: string
 }
 
 export default IProduct

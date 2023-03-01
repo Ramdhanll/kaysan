@@ -17,8 +17,8 @@ export interface IProductModel extends Document {
       provinsi_name: string
       kabOrKota: string
       kabOrKota_name: string
-      Kecamatan: string
-      Kecamatan_name: string
+      kecamatan: string
+      kecamatan_name: string
       kelurahan: string
       kelurahan_name: string
       detail_location: string

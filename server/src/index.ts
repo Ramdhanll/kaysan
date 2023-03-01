@@ -12,6 +12,7 @@ const app = createServer()
 mongoose.set('strictQuery', false)
 
 mongoose
+   // @ts-ignore
    .connect(config.mongo.url, config.mongo.options)
    .then(() => {
       logging.info('Mongo connected.')

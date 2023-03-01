@@ -40,18 +40,18 @@ export default function Carousel() {
    // This can be static or loaded from a server
    const cards = [
       {
-         title: 'Design Projects 1',
-         text: "The project board is an exclusive resource for contract work. It's perfect for freelancers, agencies, and moonlighters.",
+         title: '',
+         text: '',
          image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
       },
       {
-         title: 'Design Projects 2',
-         text: "The project board is an exclusive resource for contract work. It's perfect for freelancers, agencies, and moonlighters.",
+         title: '',
+         text: '',
          image: 'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80',
       },
       {
-         title: 'Design Projects 3',
-         text: "The project board is an exclusive resource for contract work. It's perfect for freelancers, agencies, and moonlighters.",
+         title: '',
+         text: '',
          image: 'https://images.unsplash.com/photo-1576941089067-2de3c901e126?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1278&q=80',
       },
    ]

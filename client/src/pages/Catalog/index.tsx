@@ -19,6 +19,9 @@ const Catalog = (props: Props) => {
       images: products[0].images,
       location: products[0].location,
       price: products[0].price,
+      kabOrKota: products[0].kabOrKota,
+      kecamatan: products[0].kecamatan,
+      provinsi: products[0].provinsi,
    }
 
    const [selectedProduct, setSelectedProduct] =

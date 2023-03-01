@@ -15,10 +15,16 @@
       ],
       "location": {
          "provinsi": "Banten",
-         "Kota/Kabupaten": "Kabupaten Tangerang",
-         "Kecamatan": "Kelapa Dua",
+         "provinsi_name": "provinsi_name",
+         "kabOrKota": "",
+         "kabOrKota_name": "kabOrKota_name",
+         "kecamatan": "Kelapa Dua",
+         "kecamatan_name": "kecamatan_name",
          "detail_location": "Dasana indah blok UD 10/28 RT 04 RW 28"
       },
-      "price": 700000000
+      "price": 700000000,
+      "provinsi": "Banten",
+      "kabOrKota": "",
+      "kecamatan": "Kelapa Dua"
    }
 ]

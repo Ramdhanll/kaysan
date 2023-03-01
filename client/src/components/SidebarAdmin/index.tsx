@@ -46,11 +46,11 @@ interface LinkItemProps {
 
 const LinkItems: Array<LinkItemProps> = [
    { name: 'Dashboard', icon: FiHome, to: '/admin' },
-   { name: 'Order', icon: FiTrendingUp, to: '/admin/order' },
+   // { name: 'Order', icon: FiTrendingUp, to: '/admin/order' },
    { name: 'Product', icon: FiCompass, to: '/admin/product' },
-   { name: 'Category', icon: FiStar, to: '/admin/category' },
-   { name: 'Report', icon: HiOutlineDocumentReport, to: '/admin/report' },
-   { name: 'Settings', icon: FiSettings, to: '/admin/Settings' },
+   // { name: 'Category', icon: FiStar, to: '/admin/category' },
+   // { name: 'Report', icon: HiOutlineDocumentReport, to: '/admin/report' },
+   // { name: 'Settings', icon: FiSettings, to: '/admin/Settings' },
 ]
 
 export default function SidebarAdmin({ children }: { children: ReactNode }) {
@@ -100,9 +100,11 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
          {...rest}
       >
          <Flex h='20' alignItems='center' mx='8' justifyContent='space-between'>
-            <Text fontSize='2xl' fontFamily='monospace' fontWeight='bold'>
-               Kaysan
-            </Text>
+            <Link as={NavLink} to='/'>
+               <Text fontSize='2xl' fontFamily='monospace' fontWeight='bold'>
+                  Kaysan
+               </Text>
+            </Link>
             <CloseButton
                display={{ base: 'flex', md: 'none' }}
                onClick={onClose}
