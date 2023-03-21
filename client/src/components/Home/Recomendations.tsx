@@ -4,10 +4,13 @@ import PropertyItem from './PropertyItem'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
+import IProduct from '../../interfaces/IProduct'
 
-type Props = {}
+type Props = {
+   products: IProduct[]
+}
 
-const Recomendations = (props: Props) => {
+const Recomendations = ({ products }: Props) => {
    var settings = {
       dots: true,
       infinite: false,
@@ -58,12 +61,9 @@ const Recomendations = (props: Props) => {
             Rekomendasi{' '}
          </Text>
          <Slider {...settings}>
-            <PropertyItem />
-            <PropertyItem />
-            <PropertyItem />
-            <PropertyItem />
-            <PropertyItem />
-            <PropertyItem />
+            {products.map((product: IProduct) => (
+               <PropertyItem key={product._id} product={product} />
+            ))}
          </Slider>
       </Box>
    )

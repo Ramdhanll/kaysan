@@ -34,12 +34,12 @@ import { FaBath, FaWhatsapp } from 'react-icons/fa'
 import ResultSearch from './ResultSearch'
 
 type Props = {
-   product: IProduct
+   product: IProduct | any
 }
 
 const Detail = ({ product }: Props) => {
    return (
-      <Box w={'full'} px={4} py={4} ml='320px' mt={'70px'}>
+      <Box w={'full'} px={4} py={4} ml='0px' mt={'0px'} mb={'40px'}>
          <Flex justifyContent={'space-between'}>
             <DetailImages images={product.images} />
             <Box flex='1' ml={2} alignItems={'start'} px={4} textAlign='left'>
@@ -47,7 +47,7 @@ const Detail = ({ product }: Props) => {
                   {product.name}
                </Text>
                <Text mt='-1' mb='2' color={'gray.500'} fontSize='lg'>
-                  {`${product.location['Kota/Kabupaten']}, Kecamatan ${product.location.Kecamatan}`}
+                  {`${product.location.kabOrKota_name}, Kecamatan ${product.location.kecamatan_name}`}
                </Text>
                <Text fontWeight='bold' fontSize={['4xl']} color='yellow.400'>
                   {convertToRupiah(product.price)}
@@ -112,8 +112,12 @@ const Detail = ({ product }: Props) => {
                   >
                      Description
                   </Text>
-                  <Text fontSize={['xs', 'md']} color='gray.500'>
-                     {product.description}
+                  <Text
+                     fontSize={['xs', 'md']}
+                     color='gray.500'
+                     dangerouslySetInnerHTML={{ __html: product.description }}
+                  >
+                     {/* {product.description} */}
                   </Text>
                </Box>
                <Box mt={3}>
@@ -129,9 +133,9 @@ const Detail = ({ product }: Props) => {
             </Box>
          </Flex>
 
-         <Box overflow={'hidden'}>
+         {/* <Box overflow={'hidden'}>
             <ResultSearch />
-         </Box>
+         </Box> */}
       </Box>
    )
 }

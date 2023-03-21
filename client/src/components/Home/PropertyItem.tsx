@@ -11,16 +11,21 @@ import {
    Flex,
 } from '@chakra-ui/react'
 import { Link, useNavigate } from 'react-router-dom'
+import IProduct from '../../interfaces/IProduct'
+import { convertToRupiah } from '../../helpers/Utils'
 
-type Props = {}
+type Props = {
+   product: IProduct
+}
 
-const PropertyItem = (props: Props) => {
+const PropertyItem = ({ product }: Props) => {
    const navigate = useNavigate()
 
+   console.log('pp', product)
    return (
-      <Link to={`detail/123123`}>
+      <Link to={`catalog?id=${product._id}`}>
          <Flex
-         mr={4}
+            mr={4}
             flexDirection={'column'}
             bgColor='whiteAlpha.400'
             shadow={'md'}
@@ -29,8 +34,8 @@ const PropertyItem = (props: Props) => {
             cursor='pointer'
          >
             <Image
-               src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-               alt='Green double couch with wooden legs'
+               src={product.images[0].url_image}
+               alt=''
                w={360}
                h={180}
                roundedTop={'lg'}
@@ -42,14 +47,15 @@ const PropertyItem = (props: Props) => {
                   fontWeight={'bold'}
                   fontSize={['lg', 'xl']}
                >
-                  Rp. 300.000.000
+                  {convertToRupiah(product.price)}
                </Text>
                <Text
                   color={'blackAlpha.700'}
                   fontWeight={'medium'}
                   fontSize={['md', 'lg']}
                >
-                  3 Beds, 2 Bath, 1,800sqft
+                  {product.bedroom} Beds, {product.bathroom} Bath,{' '}
+                  {product.area} sqft
                </Text>
 
                <Text
@@ -57,7 +63,8 @@ const PropertyItem = (props: Props) => {
                   fontWeight={'medium'}
                   fontSize={['md']}
                >
-                  Kelapa dua, Kabupaten Tangerang
+                  {product.location.kecamatan_name},{' '}
+                  {product.location.kabOrKota_name}
                </Text>
             </Box>
          </Flex>

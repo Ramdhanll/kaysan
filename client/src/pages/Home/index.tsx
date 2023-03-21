@@ -16,7 +16,7 @@ import {
    useColorModeValue,
    useDisclosure,
 } from '@chakra-ui/react'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 import Carousel from '../../components/Home/Carousel'
 import PropertyItem from '../../components/Home/PropertyItem'
 import Navbar from '../../components/Navbar'
@@ -25,10 +25,14 @@ import SidebarWithHeader from '../../components/Sidebar'
 import Recomendations from '../../components/Home/Recomendations'
 import SearchBox from '../../components/Home/SearchBox'
 import Footer from '../../components/Footer'
+import useSWR from 'swr'
 
 interface IHome {}
 const Home: FC<IHome> = () => {
    const { isOpen, onOpen, onClose } = useDisclosure()
+   const { data: dataProducts } = useSWR(`/api/products`)
+
+   console.log('dataProducts', dataProducts?.products)
 
    return (
       <Box bg={'whiteAlpha.900'}>
@@ -40,7 +44,9 @@ const Home: FC<IHome> = () => {
                <Carousel />
                <Box textAlign='left' width='full' overflow={'hidden'}>
                   <SearchBox />
-                  <Recomendations />
+                  {dataProducts?.products && (
+                     <Recomendations products={dataProducts?.products} />
+                  )}
                </Box>
             </Box>
          </Box>

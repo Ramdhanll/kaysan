@@ -2,6 +2,20 @@ import axios from 'axios'
 import config from '../config/config'
 import logging from '../config/logging'
 
+const GetProductByID = async (id: string) => {
+   logging.info('get product by id')
+
+   try {
+      const { data } = await axios.get(
+         `${config.server.url}/api/products/${id}`
+      )
+
+      return data
+   } catch (error) {
+      logging.error(error)
+      throw error
+   }
+}
 const Create = async (values: any) => {
    logging.info('Creating product...')
 
@@ -51,6 +65,7 @@ const ProductService = {
    Delete,
    Create,
    Update,
+   GetProductByID,
 }
 
 export default ProductService

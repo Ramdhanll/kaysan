@@ -4,11 +4,13 @@ import {
    getProducts,
    deleteProduct,
    updateProduct,
+   getProduct,
 } from '../controller/productController'
 import { isAdmin, isAuth } from '../middleware/jwt'
 const router = express.Router()
 
 router.get('/', getProducts)
+router.get('/:id', getProduct)
 
 router.post('/', isAuth, isAdmin, createProduct)
 

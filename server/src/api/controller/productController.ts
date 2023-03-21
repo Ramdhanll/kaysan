@@ -5,6 +5,21 @@ import { validationResult } from 'express-validator'
 import fs from 'fs'
 import config from '../../config/config'
 
+export const getProduct = async (req: Request, res: Response) => {
+   logging.info('Incoming get product')
+
+   try {
+      const product = await Products.findById(req.params.id)
+
+      if (!product)
+         return res.status(404).json({ message: 'Product not found' })
+
+      res.status(200).json({ product })
+   } catch (error) {
+      res.status(500).json({ message: 'Server down!', error })
+   }
+}
+
 export const getProducts = async (req: Request, res: Response) => {
    logging.info(`Incoming get products`)
 

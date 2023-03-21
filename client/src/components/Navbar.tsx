@@ -25,21 +25,32 @@ import AuthService from '../services/auth'
 import UserContext, { initialUserState } from '../contexts/user'
 import { useNavigate, Link as LinkRouter } from 'react-router-dom'
 
-const Links = ['Catalog', 'Tentang Kami']
+const Links = [
+   {
+      label: 'Catalog',
+      url: '/catalog',
+   },
+   {
+      label: 'Tentang Kami',
+      url: '/tentang-kami',
+   },
+]
 
-const NavLink = ({ children }: { children: ReactNode }) => (
-   <Link
-      px={2}
-      py={1}
-      rounded={'md'}
-      _hover={{
-         textDecoration: 'none',
-         bg: useColorModeValue('gray.200', 'gray.700'),
-      }}
-      href={'#'}
-   >
-      {children}
-   </Link>
+const NavLink = ({ label, url }: { label: string; url: string }) => (
+   <LinkRouter to={url}>
+      <Link
+         px={2}
+         py={1}
+         rounded={'md'}
+         _hover={{
+            textDecoration: 'none',
+            bg: useColorModeValue('gray.200', 'gray.700'),
+         }}
+         href={url}
+      >
+         {label}
+      </Link>
+   </LinkRouter>
 )
 
 export default function Navbar() {
@@ -110,7 +121,11 @@ export default function Navbar() {
                   display={{ base: 'none', md: 'flex' }}
                >
                   {Links.map((link) => (
-                     <NavLink key={link}>{link}</NavLink>
+                     <NavLink
+                        key={link.label}
+                        label={link.label}
+                        url={link.url}
+                     />
                   ))}
                </HStack>
             </HStack>
@@ -151,7 +166,11 @@ export default function Navbar() {
             <Box pb={4} display={{ md: 'none' }}>
                <Stack as={'nav'} spacing={4}>
                   {Links.map((link) => (
-                     <NavLink key={link}>{link}</NavLink>
+                     <NavLink
+                        key={link.label}
+                        label={link.label}
+                        url={link.url}
+                     />
                   ))}
                </Stack>
             </Box>

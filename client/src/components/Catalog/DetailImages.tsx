@@ -21,16 +21,18 @@ type Props = {
 }
 
 const DetailImages = ({ images }: Props) => {
+   console.log('images', images)
    const [thumbsSwiper, setThumbsSwiper] = useState(null)
 
    return (
       <Box
          flex='0.5'
          h='100%'
-         display={'flex'}
+         // display={'flex'}
          flexDir='column'
          alignItems={'start'}
          justifyContent='start'
+         // bg='red.200'
       >
          <Swiper
             style={{
@@ -45,13 +47,13 @@ const DetailImages = ({ images }: Props) => {
             modules={[FreeMode, Navigation, Thumbs]}
             className='mySwiper2'
          >
-            {images.map((image) => (
+            {images.map((image: any) => (
                <SwiperSlide>
-                  <Image src={image} borderRadius={'md'} />
+                  <Image src={image?.url_image} borderRadius={'md'} />
                </SwiperSlide>
             ))}
          </Swiper>
-         <Box my={3}></Box>
+         {/* <Box my={3}></Box>
          <Swiper
             style={{
                width: '500px',
@@ -65,12 +67,16 @@ const DetailImages = ({ images }: Props) => {
             modules={[FreeMode, Navigation, Thumbs]}
             className='mySwiper'
          >
-            {images.map((image) => (
+            {images.map((image: any) => (
                <SwiperSlide>
-                  <Image cursor={'pointer'} src={image} borderRadius={'md'} />
+                  <Image
+                     cursor={'pointer'}
+                     src={image?.url_image}
+                     borderRadius={'md'}
+                  />
                </SwiperSlide>
             ))}
-         </Swiper>
+         </Swiper> */}
       </Box>
    )
 }

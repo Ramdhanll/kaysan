@@ -183,7 +183,7 @@ const Filter = (props: Props) => {
 
             <Box w={'full'}>
                <Button colorScheme={'green'} w='full'>
-                  APPLY
+                  FILTER
                </Button>
             </Box>
          </VStack>

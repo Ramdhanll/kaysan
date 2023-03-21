@@ -1,11 +1,14 @@
 interface IProduct {
-   id: number
+   _id: number
    name: string
    description: string
    bedroom: number
    bathroom: number
    area: number
-   images: string[]
+   images: {
+      url_image: string
+      id: string
+   }[]
    location: {
       provinsi: string
       provinsi_name: string
@@ -14,6 +17,8 @@ interface IProduct {
       kecamatan: string
       kecamatan_name: string
       detail_location: string
+      kelurahan: string
+      kelurahan_name: string
    }
    price: number
    provinsi: string

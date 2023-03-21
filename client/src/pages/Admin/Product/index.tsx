@@ -774,22 +774,17 @@ const AdminProduct: FC<IPage> = () => {
                            >
                               <FormLabel>Kabupaten / Kota</FormLabel>
                               <Select placeholder='Select kabupaten / kota'>
-                                 {kabOrKota.map(
-                                    (item: any) =>
-                                       item.value ==
-                                       productSelected?.location.kabOrKota ? (
-                                          <option value={item.value} selected>
-                                             {item.name}
-                                          </option>
-                                       ) : (
-                                          <option value={item.value}>
-                                             {item.name}
-                                          </option>
-                                       )
-
-                                    // <option value={item.value}>
-                                    //    {item.name}
-                                    // </option>
+                                 {kabOrKota.map((item: any) =>
+                                    item.value ==
+                                    productSelected?.location.kabOrKota ? (
+                                       <option value={item.value} selected>
+                                          {item.name}
+                                       </option>
+                                    ) : (
+                                       <option value={item.value}>
+                                          {item.name}
+                                       </option>
+                                    )
                                  )}
                               </Select>
                            </FormControl>
